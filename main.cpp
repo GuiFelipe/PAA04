@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include <time.h>
+#include <fstream>
 
 // Number of vertices in the graph
 #define V 10
@@ -150,7 +151,18 @@ int main()
 {
     clock_t t;
     double time_taken;
-    /* Let us create the example graph discussed above */
+
+    ifstream myfile ("/home/osama/CLionProjects/PAA04/Conjunto4/Entrada 10.txt");
+    if (myfile.is_open())
+    {
+        cout << "Abriu" << endl;
+        //do something
+    }
+    else cout << "Unable to open file" << endl;
+    myfile.clear();
+    myfile.close();
+
+/* Let us create the example graph discussed above */
     int graph[V][V] = { {0, INF, 8, 3, 3, 6, INF, 1, 0, 5 },
                         {8, 0, 1, 2, INF, INF, 4, INF, 4, 6 },
                         {4, 6, 0, 9, 1, 9, 6, INF, 3, INF },
@@ -162,7 +174,6 @@ int main()
                         {2, INF, 9, INF, 9, 3, INF, 3, 0, 7 },
                         {0, INF, 1, INF, INF, 5, INF, 3, 8, 0 }
     };
-
     t = clock();
     for(int i = 0; i < V; i++)
     {
@@ -177,6 +188,6 @@ int main()
     t = clock() - t;
     time_taken = ((double) t) / CLOCKS_PER_SEC;
     cout << "Time taken in Warshall: " << time_taken << endl;
-    
+
     return 0;
 }
