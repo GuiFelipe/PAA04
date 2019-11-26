@@ -1,9 +1,11 @@
 // A C++ program for Dijkstra's single source shortest path algorithm.
 // The program is for adjacency matrix representation of the graph
 #include <iostream>
-#include <limits.h>
-#include <stdio.h>
-#include <time.h>
+#include <climits>
+#include <cstdio>
+#include <ctime>
+#include <fstream>
+#include <string>
 #include <iomanip>
 
 // Number of vertices in the graph
@@ -20,10 +22,10 @@ using namespace std;
 int minDistance(int dist[], bool sptSet[])
 {
     // Initialize min value
-    int min = INT_MAX, min_index;
+    int min = INT_MAX, min_index = -1;
 
     for (int v = 0; v < V; v++)
-        if (sptSet[v] == false && dist[v] <= min)
+        if (!sptSet[v] && dist[v] <= min)
             min = dist[v], min_index = v;
 
     return min_index;
@@ -151,7 +153,18 @@ int main()
 {
     clock_t t;
     double time_taken;
-    /* Let us create the example graph discussed above */
+    string Num = std::to_string(V);
+    ifstream myfile ("/home/osama/CLionProjects/PAA04/Conjunto4/Entrada "+ Num + ".txt");
+    if (myfile.is_open())
+    {
+        cout << "Abriu" << endl;
+        //do something
+    }
+    else cout << "Unable to open file" << endl;
+    myfile.clear();
+    myfile.close();
+
+/* Let us create the example graph discussed above */
     int graph[V][V] = { {0, INF, 8, 3, 3, 6, INF, 1, 0, 5 },
                         {8, 0, 1, 2, INF, INF, 4, INF, 4, 6 },
                         {4, 6, 0, 9, 1, 9, 6, INF, 3, INF },
@@ -163,7 +176,6 @@ int main()
                         {2, INF, 9, INF, 9, 3, INF, 3, 0, 7 },
                         {0, INF, 1, INF, INF, 5, INF, 3, 8, 0 }
     };
-
     t = clock();
     for(int i = 0; i < V; i++)
     {
