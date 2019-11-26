@@ -1,11 +1,9 @@
-#include <iostream>
-
-
 // A C++ program for Dijkstra's single source shortest path algorithm.
 // The program is for adjacency matrix representation of the graph
-
+#include <iostream>
 #include <limits.h>
 #include <stdio.h>
+#include <time.h>
 
 // Number of vertices in the graph
 #define V 10
@@ -150,6 +148,8 @@ void floydWarshall (int graph[][V])
 // driver program to test above function
 int main()
 {
+    clock_t t;
+    double time_taken;
     /* Let us create the example graph discussed above */
     int graph[V][V] = { {0, INF, 8, 3, 3, 6, INF, 1, 0, 5 },
                         {8, 0, 1, 2, INF, INF, 4, INF, 4, 6 },
@@ -163,11 +163,20 @@ int main()
                         {0, INF, 1, INF, INF, 5, INF, 3, 8, 0 }
     };
 
+    t = clock();
     for(int i = 0; i < V; i++)
     {
         dijkstra(graph, i);
     }
-    floydWarshall(graph);
+    t = clock() - t;
+    time_taken = ((double) t) / CLOCKS_PER_SEC;
+    cout << "Time taken in dijkstra: " << time_taken << endl;
 
+    t = clock();
+    floydWarshall(graph);
+    t = clock() - t;
+    time_taken = ((double) t) / CLOCKS_PER_SEC;
+    cout << "Time taken in Warshall: " << time_taken << endl;
+    
     return 0;
 }
