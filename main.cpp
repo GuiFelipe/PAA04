@@ -1,10 +1,11 @@
 // A C++ program for Dijkstra's single source shortest path algorithm.
 // The program is for adjacency matrix representation of the graph
 #include <iostream>
-#include <limits.h>
-#include <stdio.h>
-#include <time.h>
+#include <climits>
+#include <cstdio>
+#include <ctime>
 #include <fstream>
+#include <string>
 
 // Number of vertices in the graph
 #define V 10
@@ -20,10 +21,10 @@ using namespace std;
 int minDistance(int dist[], bool sptSet[])
 {
     // Initialize min value
-    int min = INT_MAX, min_index;
+    int min = INT_MAX, min_index = -1;
 
     for (int v = 0; v < V; v++)
-        if (sptSet[v] == false && dist[v] <= min)
+        if (!sptSet[v] && dist[v] <= min)
             min = dist[v], min_index = v;
 
     return min_index;
@@ -151,8 +152,8 @@ int main()
 {
     clock_t t;
     double time_taken;
-
-    ifstream myfile ("/home/osama/CLionProjects/PAA04/Conjunto4/Entrada 10.txt");
+    string Num = std::to_string(V);
+    ifstream myfile ("/home/osama/CLionProjects/PAA04/Conjunto4/Entrada "+ Num + ".txt");
     if (myfile.is_open())
     {
         cout << "Abriu" << endl;
