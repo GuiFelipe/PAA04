@@ -6,6 +6,7 @@
 #include <ctime>
 #include <fstream>
 #include <string>
+#include <iomanip>
 
 // Number of vertices in the graph
 #define V 10
@@ -90,7 +91,7 @@ void printSolutionFloyd(int dist[][V])
             if (dist[i][j] == INF)
                 cout<<"INF"<<"     ";
             else
-                cout<<dist[i][j]<<"     ";
+                cout << setfill('0') << setw(3) << dist[i][j] << "     ";
         }
         cout<<endl;
     }
