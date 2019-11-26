@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include <time.h>
+#include <iomanip>
 
 // Number of vertices in the graph
 #define V 10
@@ -88,7 +89,7 @@ void printSolutionFloyd(int dist[][V])
             if (dist[i][j] == INF)
                 cout<<"INF"<<"     ";
             else
-                cout<<dist[i][j]<<"     ";
+                cout << setfill('0') << setw(3) << dist[i][j] << "     ";
         }
         cout<<endl;
     }
@@ -177,6 +178,6 @@ int main()
     t = clock() - t;
     time_taken = ((double) t) / CLOCKS_PER_SEC;
     cout << "Time taken in Warshall: " << time_taken << endl;
-    
+
     return 0;
 }
