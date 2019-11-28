@@ -7,6 +7,9 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include <mutex>
+
+
 
 // Number of vertices in the graph
 #define V 10
@@ -17,6 +20,51 @@ vertices not connected to each other */
 
 using namespace std;
 
+mutex mtx;
+
+// Fucntion to convert a string to
+// integer array
+int * convertStrtoArr(string str, int amount)
+{
+    // get length of string str
+    int str_length;
+    str_length =  str.length();
+    //cout << "str.length(): " << str.length() << endl;
+
+    // create an array with size as string
+    // length and initialize with 0
+    //int arr[str_length] = { 0 };
+
+    int *arr;
+    arr = (int *) calloc(amount, sizeof(int));
+
+    int j = 0, i;
+
+    mtx.lock();
+
+    // Traverse the string
+    for (i = 0; str[i] != '\n'; i++) {
+        if(i < str_length - 1){
+            // if str[i] is ' ' then split
+            if (str[i] == ' ') {
+
+                // Increment j to point to next
+                // array location
+                j++;
+            }
+            else {
+
+                // subtract str[i] by 48 to convert it to int
+                // Generate number by multiplying 10 and adding
+                // (int)(str[i])
+                arr[j] = arr[j] * 10 + (str[i] - 48);
+                cout << "arr[" << j << "] : " << arr[j] << endl;
+            }
+        }
+    }
+    mtx.unlock();
+    return arr;
+}
 // A utility function to find the vertex with minimum distance value, from
 // the set of vertices not yet included in shortest path tree
 int minDistance(int dist[], bool sptSet[])
@@ -153,29 +201,49 @@ int main()
 {
     clock_t t;
     double time_taken;
+    string line;
+    int *actualLine;
+    int amount = V - 1;
+    actualLine = (int *) calloc(V, sizeof(int));
     string Num = std::to_string(V);
     ifstream myfile ("/home/osama/CLionProjects/PAA04/Conjunto4/Entrada "+ Num + ".txt");
+    int graph[V][V];
     if (myfile.is_open())
     {
-        cout << "Abriu" << endl;
-        //do something
+        int count = 0;
+        while(getline (myfile, line))
+        {
+            actualLine = convertStrtoArr(line, V);
+            //cout << "ActualLine: " << actualLine << endl;
+            for(int i = 0; i < V; i++)
+            {
+                graph[count][i] = actualLine[i];
+                if(graph[count][i] == 0){
+                    if(count != i) graph[count][i] = INF;
+                }
+                //cout << "Graph[" << count << "][" << i << "]: " << actualLine[i] << endl;
+            }
+            count++;
+        }
     }
     else cout << "Unable to open file" << endl;
     myfile.clear();
     myfile.close();
 
-/* Let us create the example graph discussed above */
-    int graph[V][V] = { {0, INF, 8, 3, 3, 6, INF, 1, 0, 5 },
-                        {8, 0, 1, 2, INF, INF, 4, INF, 4, 6 },
-                        {4, 6, 0, 9, 1, 9, 6, INF, 3, INF },
-                        {INF, INF, 6, 0, 5, 4 ,INF, INF ,4, 4 },
-                        {6, 9, 8, INF, INF, 0, INF, INF, 3, INF },
-                        {3, INF, 2, 8, 7, 0, 6, 4, INF, INF },
-                        {7, 5, 4, INF, 1, INF, 0, INF, INF, 6 },
-                        {1, 7, 0, 8, 1, 2, INF, 0, 8, 7 },
-                        {2, INF, 9, INF, 9, 3, INF, 3, 0, 7 },
-                        {0, INF, 1, INF, INF, 5, INF, 3, 8, 0 }
-    };
+///* Let us create the example graph discussed above */
+//    int graph[V][V] = { {0, INF, 8, 3, 3, 6, INF, 1, 0, 5 },
+//                        {8, 0, 1, 2, INF, INF, 4, INF, 4, 6 },
+//                        {4, 6, 0, 9, 1, 9, 6, INF, 3, INF },
+//                        {INF, INF, 6, 0, 5, 4 ,INF, INF ,4, 4 },
+//                        {6, 9, 8, INF, INF, 0, INF, INF, 3, INF },
+//                        {3, INF, 2, 8, 7, 0, 6, 4, INF, INF },
+//                        {7, 5, 4, INF, 1, INF, 0, INF, INF, 6 },
+//                        {1, 7, 0, 8, 1, 2, INF, 0, 8, 7 },
+//                        {2, INF, 9, INF, 9, 3, INF, 3, 0, 7 },
+//                        {0, INF, 1, INF, INF, 5, INF, 3, 8, 0 }
+//    };
+
+
     t = clock();
     for(int i = 0; i < V; i++)
     {
