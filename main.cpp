@@ -43,22 +43,20 @@ int * convertStrtoArr(string str, int amount)
     mtx.lock();
 
     // Traverse the string
-    for (i = 0; str[i] != '\n'; i++) {
+    for (i = 0; str[i] != '\r'; i++) {
         if(i < str_length - 1){
             // if str[i] is ' ' then split
             if (str[i] == ' ') {
-
                 // Increment j to point to next
                 // array location
                 j++;
             }
             else {
-
                 // subtract str[i] by 48 to convert it to int
                 // Generate number by multiplying 10 and adding
                 // (int)(str[i])
                 arr[j] = arr[j] * 10 + (str[i] - 48);
-                cout << "arr[" << j << "] : " << arr[j] << endl;
+                //cout << "arr[" << j << "] : " << arr[j] << endl;
             }
         }
     }
@@ -125,7 +123,7 @@ void dijkstra(int graph[V][V], int src)
     }
 
     // print the constructed distance array
-    printSolution(dist);
+    //printSolution(dist);
 }
 /* A utility function to print solution */
 void printSolutionFloyd(int dist[][V])
@@ -192,7 +190,7 @@ void floydWarshall (int graph[][V])
     }
 
     // Print the shortest distance matrix
-    printSolutionFloyd(dist);
+    //printSolutionFloyd(dist);
 }
 
 
@@ -203,10 +201,11 @@ int main()
     double time_taken;
     string line;
     int *actualLine;
-    int amount = V - 1;
     actualLine = (int *) calloc(V, sizeof(int));
     string Num = std::to_string(V);
     ifstream myfile ("/home/osama/CLionProjects/PAA04/Conjunto4/Entrada "+ Num + ".txt");
+    ofstream output;
+    output.open("/home/osama/Documents/Unioeste/2019/PAA/Trabalho04/Saida.csv", std::ios::app);
     int graph[V][V];
     if (myfile.is_open())
     {
@@ -230,21 +229,8 @@ int main()
     myfile.clear();
     myfile.close();
 
-///* Let us create the example graph discussed above */
-//    int graph[V][V] = { {0, INF, 8, 3, 3, 6, INF, 1, 0, 5 },
-//                        {8, 0, 1, 2, INF, INF, 4, INF, 4, 6 },
-//                        {4, 6, 0, 9, 1, 9, 6, INF, 3, INF },
-//                        {INF, INF, 6, 0, 5, 4 ,INF, INF ,4, 4 },
-//                        {6, 9, 8, INF, INF, 0, INF, INF, 3, INF },
-//                        {3, INF, 2, 8, 7, 0, 6, 4, INF, INF },
-//                        {7, 5, 4, INF, 1, INF, 0, INF, INF, 6 },
-//                        {1, 7, 0, 8, 1, 2, INF, 0, 8, 7 },
-//                        {2, INF, 9, INF, 9, 3, INF, 3, 0, 7 },
-//                        {0, INF, 1, INF, INF, 5, INF, 3, 8, 0 }
-//    };
-
-
     t = clock();
+    if(V == 10) output << "Dijkstra" << "," << "Floyd-Warshall" << "," << "Conjunto de Entrada"  << endl;
     for(int i = 0; i < V; i++)
     {
         dijkstra(graph, i);
@@ -252,12 +238,15 @@ int main()
     t = clock() - t;
     time_taken = ((double) t) / CLOCKS_PER_SEC;
     cout << "Time taken in dijkstra: " << time_taken << endl;
+    output << time_taken << ",";
 
     t = clock();
     floydWarshall(graph);
     t = clock() - t;
     time_taken = ((double) t) / CLOCKS_PER_SEC;
     cout << "Time taken in Warshall: " << time_taken << endl;
+    output << time_taken << "," << V  << endl;
+    output.close();
 
     return 0;
 }
